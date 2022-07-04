@@ -20,6 +20,25 @@ func (caller internalStandardCaller) CallTELNET(ctx telnet.Context, w telnet.Wri
 	standardCallerCallTELNET(os.Stdin, os.Stdout, os.Stderr, ctx, w, r)
 }
 
+var ASCII = [256]rune{
+	'\x00', '☺', '☻', '♥', '♦', '♣', '♠', '•', '\b', '\t', '\n', '♂', '♀', '\r', '♫', '☼',
+	'►', '◄', '↕', '‼', '¶', '§', '▬', '↨', '↑', '↓', '→', '\x1b', '∟', '↔', '▲', '▼',
+	' ', '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/',
+	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ':', ';', '<', '=', '>', '?',
+	'@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
+	'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '[', '\\', ']', '^', '_',
+	'`', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
+	'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '{', '|', '}', '~', '⌂',
+	'€', '\u0081', 'é', 'â', 'ä', 'à', 'å', 'ç', 'ê', 'ë', 'è', 'ï', 'î', 'ì', 'Ä', 'Å',
+	'É', 'æ', 'Æ', 'ô', 'ö', 'ò', 'û', 'ù', 'ÿ', 'Ö', 'Ü', '¢', '£', '¥', '₧', 'ƒ',
+	'á', 'í', 'ó', 'ú', 'ñ', 'Ñ', 'ª', 'º', '¿', '⌐', '¬', '½', '¼', '¡', '«', '»',
+	'░', '▒', '▓', '│', '┤', '╡', '╢', '╖', '╕', '╣', '║', '╗', '╝', '╜', '╛', '┐',
+	'└', '┴', '┬', '├', '─', '┼', '╞', '╟', '╚', '╔', '╩', '╦', '╠', '═', '╬', '╧',
+	'╨', '╤', '╥', '╙', '╘', '╒', '╓', '╫', '╪', '┘', '┌', '█', '▄', '▌', '▐', '▀',
+	'α', 'ß', 'Γ', 'π', 'Σ', 'σ', 'µ', 'τ', 'Φ', 'Θ', 'Ω', 'δ', '∞', 'φ', 'ε', '∩',
+	'≡', '±', '≥', '≤', '⌠', '⌡', '÷', '≈', '°', '∙', '·', '√', 'ⁿ', '²', '■', '\u00a0',
+}
+
 func standardCallerCallTELNET(stdin io.ReadCloser, stdout io.WriteCloser, stderr io.WriteCloser, ctx telnet.Context, w telnet.Writer, r telnet.Reader) {
 
 	go func(writer io.Writer, reader io.Reader) {
@@ -36,7 +55,10 @@ func standardCallerCallTELNET(stdin io.ReadCloser, stdout io.WriteCloser, stderr
 				break
 			}
 
-			oi.LongWrite(writer, p)
+			x := fmt.Sprintf("%s", string(ASCII[p[0]]))
+			//	oi.LongWrite(writer, []byte(x))
+			fmt.Print(x)
+
 		}
 	}(stdout, r)
 
@@ -83,5 +105,7 @@ func scannerSplitFunc(data []byte, atEOF bool) (advance int, token []byte, err e
 func main() {
 	var caller telnet.Caller = StandardCaller
 
-	telnet.DialToAndCall("bbs.lunduke.com:23", caller)
+	//	telnet.DialToAndCall("bbs.lunduke.com:23", caller)
+	telnet.DialToAndCall("phitel.us:23", caller)
+
 }
