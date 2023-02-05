@@ -55,6 +55,10 @@ func standardCallerCallTELNET(stdin io.ReadCloser, stdout io.WriteCloser, stderr
 				break
 			}
 
+			//if p[0] == 0x1b {
+			//	continue
+			//}
+
 			x := fmt.Sprintf("%s", string(ASCII[p[0]]))
 			//	oi.LongWrite(writer, []byte(x))
 			fmt.Print(x)
@@ -105,7 +109,7 @@ func scannerSplitFunc(data []byte, atEOF bool) (advance int, token []byte, err e
 func main() {
 	var caller telnet.Caller = StandardCaller
 
-	//	telnet.DialToAndCall("bbs.lunduke.com:23", caller)
+	//telnet.DialToAndCall("bbs.lunduke.com:23", caller)
 	telnet.DialToAndCall("phitel.us:23", caller)
 
 }
